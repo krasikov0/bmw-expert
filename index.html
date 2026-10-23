@@ -117,6 +117,14 @@ p{color:var(--mut);margin:0 0 12px}
 /* form */
 .step-h{display:flex;align-items:center;gap:10px;margin:26px 0 12px;font-size:18px;font-weight:700}
 .step-h i{font-style:normal;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;font-size:13px;background:var(--card2);border:1px solid var(--line2);color:var(--mut);transition:.25s}
+.step-h{scroll-margin-top:90px}
+.step-h .msg{margin-left:auto;font-size:12px;font-weight:600;color:#ff4d55}
+.step-h.err i{background:var(--red);border-color:var(--red);color:#fff}
+.step-h.err{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.sum .btn{white-space:nowrap;flex:none}
+.sum #sumN{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn.wait{background:var(--card2);border:1px solid var(--line2);box-shadow:none;color:var(--tx)}
 .step-h.ok i{background:var(--ok);border-color:var(--ok);color:#fff}
 .field{position:relative;margin-bottom:10px}
 .field label{position:absolute;left:15px;top:9px;font-size:11px;color:var(--mut);pointer-events:none}
@@ -310,7 +318,7 @@ nav button.on svg.i{color:var(--blue2)}
   <h1>Онлайн-запись</h1>
   <p>Четыре шага — и мастер перезвонит для подтверждения.</p>
 
-  <div class="step-h" id="s1"><i>1</i>Ваш автомобиль</div>
+  <div class="step-h" id="s1"><i>1</i>Ваш автомобиль<span class="msg"></span></div>
   <div class="chips" id="series"></div>
   <div id="modelBox"></div>
   <div class="two">
@@ -318,7 +326,7 @@ nav button.on svg.i{color:var(--blue2)}
     <div class="field"><label>Пробег, км</label><input id="km" inputmode="numeric" placeholder="120 000"></div>
   </div>
 
-  <div class="step-h" id="s2"><i>2</i>Услуги</div>
+  <div class="step-h" id="s2"><i>2</i>Услуги<span class="msg"></span></div>
   <div class="chips" id="cats"></div>
   <div id="services" style="margin-top:6px"></div>
   <div style="margin-top:14px;font-size:13px;font-weight:600">Своя услуга или описание проблемы</div>
@@ -329,18 +337,18 @@ nav button.on svg.i{color:var(--blue2)}
   <div id="ownList" style="margin-top:8px"></div>
   <div class="note"><svg class="i"><use href="#info"/></svg><span>Цены с пометкой «от» ориентировочные — точную стоимость мастер назовёт после осмотра. Работы начинаются только после вашего согласия.</span></div>
 
-  <div class="step-h" id="s3"><i>3</i>Дата и время</div>
+  <div class="step-h" id="s3"><i>3</i>Дата и время<span class="msg"></span></div>
   <div class="chips" id="days"></div>
   <div class="slots" id="slots" style="margin-top:6px"></div>
 
-  <div class="step-h" id="s4"><i>4</i>Контакты</div>
+  <div class="step-h" id="s4"><i>4</i>Контакты<span class="msg"></span></div>
   <div class="field"><label>Имя</label><input id="name" placeholder="Как к вам обращаться" autocomplete="name" oninput="marks()"></div>
-  <div class="field"><label>Телефон</label><input id="phone" type="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel"></div>
+  <div class="field"><label>Телефон</label><input id="cPhone" type="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel"></div>
   <div class="field"><label>Комментарий</label><textarea id="note" rows="2" placeholder="Госномер, VIN, пожелания"></textarea></div>
 
   <div class="sum">
     <div style="min-width:0"><span id="sumN">Ничего не выбрано</span><b id="sumP">0 ₽</b></div>
-    <button class="btn sm" onclick="submit()">Записаться</button>
+    <button class="btn sm" id="sendBtn" onclick="submit()">Записаться</button>
   </div>
 </section>
 
@@ -525,15 +533,22 @@ function sum(){
   $('#sumP').textContent=priceText(l);
   marks();
 }
+function missing(){
+  if(!carName())return['#s1','Укажите авто','Укажите модель автомобиля'];
+  if(!list().length)return['#s2','Выберите услугу','Отметьте услугу или опишите проблему'];
+  if(!S.slot)return['#s3','Выберите время','Выберите день и свободный час'];
+  if($('#name').value.trim().length<2)return['#s4','Укажите имя','Напишите, как к вам обращаться'];
+  if($('#cPhone').value.replace(/\D/g,'').length!==11)return['#s4','Укажите телефон','Введите номер телефона полностью'];
+  return null;
+}
 function marks(){
-  $('#s1').classList.toggle('ok',!!carName());
-  $('#s2').classList.toggle('ok',list().length>0);
-  $('#s3').classList.toggle('ok',!!S.slot);
-  $('#s4').classList.toggle('ok',$('#name').value.trim().length>1&&$('#phone').value.replace(/\D/g,'').length===11);
+  const st={s1:!!carName(),s2:list().length>0,s3:!!S.slot,s4:$('#name').value.trim().length>1&&$('#cPhone').value.replace(/\D/g,'').length===11};
+  for(const k in st){const el=$('#'+k);el.classList.toggle('ok',st[k]);if(st[k]){el.classList.remove('err');el.querySelector('.msg').textContent=''}}
+  const m=missing(),b=$('#sendBtn');b.textContent=m?m[1]:'Записаться';b.classList.toggle('wait',!!m);
 }
 
 /* телефон: маска +7 (900) 123-45-67, корректно стирается */
-$('#phone').addEventListener('input',e=>{
+$('#cPhone').addEventListener('input',e=>{
   const el=e.target;let d=el.value.replace(/\D/g,'');
   if(e.inputType==='deleteContentBackward'&&d===(el.dataset.d||''))d=d.slice(0,-1);
   if(d.startsWith('8'))d='7'+d.slice(1);if(d&&!d.startsWith('7'))d='7'+d;d=d.slice(0,11);
@@ -543,14 +558,13 @@ $('#phone').addEventListener('input',e=>{
 $('#km').addEventListener('input',e=>{const d=e.target.value.replace(/\D/g,'').slice(0,7);e.target.value=d?(+d).toLocaleString('ru-RU').replace(/\s/g,' '):''});
 
 function submit(){
-  const l=list(),name=$('#name').value.trim(),phone=$('#phone').value.trim();
-  const goTo=id=>$(id).scrollIntoView({behavior:'smooth',block:'center'});
-  if(!carName()){goTo('#s1');return toast('Укажите модель автомобиля')}
-  if(!l.length){goTo('#s2');return toast('Выберите услугу или опишите проблему')}
+  const l=list(),name=$('#name').value.trim(),phone=$('#cPhone').value.trim();
   drawDays();
-  if(!S.slot){goTo('#s3');return toast('Выберите удобное время')}
-  if(name.length<2){goTo('#s4');return toast('Как к вам обращаться?')}
-  if(phone.replace(/\D/g,'').length!==11){goTo('#s4');return toast('Проверьте номер телефона')}
+  const m=missing();
+  if(m){const el=$(m[0]);el.classList.remove('err');void el.offsetWidth;el.classList.add('err');el.querySelector('.msg').textContent=m[2];
+    el.scrollIntoView({behavior:'smooth',block:'start'});toast(m[2]);
+    if(m[0]==='#s4')setTimeout(()=>($('#name').value.trim().length<2?$('#name'):$('#cPhone')).focus({preventScroll:true}),400);
+    return}
   const o={id:Store.uid()+Date.now().toString(36),num:Math.max(1000,...Store.orders().map(x=>x.num||0))+1,car:carName(),year:S.year,km:$('#km').value.trim(),
     services:l,date:S.day,time:S.slot,name,phone,note:$('#note').value.trim(),status:'new',created:new Date().toISOString()};
   Store.addOrder(o);
@@ -587,11 +601,7 @@ function drawStatus(){
     const rest=mine.filter(o=>o!==active);
     if(rest.length)h+=`<h2>Другие записи</h2><div class="card">${rest.map(o=>`<div class="kv"><span>${dayLabel(o.date)} · ${esc(o.car)}</span><b>${(Store.STATUSES[o.status]||{}).t||''}</b></div>`).join('')}</div>`;
   }else{
-    h+=`<p>Здесь появится статус вашего автомобиля: подтверждение, ход ремонта, смета и готовность к выдаче. Вот как это выглядит:</p>
-    <div class="row static">${ic('car')}<div class="t"><b>BMW X5 xDrive30d (F15)</b><span>Пример заказ-наряда</span></div><span class="tag b">В работе</span></div>
-    <div class="bar"><i style="width:65%"></i></div><p style="font-size:12px">Мастер работает с автомобилем</p>
-    <div class="steps">${STEP('done','Заявка отправлена','Мы получили ваши данные')}${STEP('done','Подтверждение','Запись подтверждена')}${STEP('now','Приёмка и ремонт','Замена рычагов и масла')}${STEP('','Готово к выдаче','Сообщим, когда можно забирать')}${STEP('','Автомобиль выдан','')}</div>
-    <button class="btn" onclick="go('book')"><svg class="i"><use href="#cal"/></svg>Записаться</button>`;
+    h+=`<div class="hero empty">${ic('wrench')}<h2>Записей пока нет</h2><p>После записи здесь будет статус вашего автомобиля: подтверждение, ход ремонта, смета и готовность к выдаче.</p><button class="btn" onclick="go('book')"><svg class="i"><use href="#cal"/></svg>Записаться</button></div>`;
   }
   $('#v-status').innerHTML=h;
 }
