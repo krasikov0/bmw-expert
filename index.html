@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#07090c">
+<title>BMW Expert — Казань</title>
+<script async src="https://telegram.org/js/telegram-web-app.js" onload="window.tgInit&&tgInit()"></script>
+<style>
+:root{color-scheme:dark;
+  --bg:#07090c;--bg2:#0d1116;--card:#12171e;--card2:#181e27;--line:#232b36;--line2:#2e3846;
+  --tx:#f3f6fa;--mut:#8995a5;--dim:#5d6878;
+  --blue:#1d6fe0;--blue2:#4c9dff;--sky:#7cc4ff;--red:#e3262f;--navy:#173d8a;
+  --ok:#4c9dff;--warn:#ff4d55;--r:20px;
+  --sh:0 10px 30px -12px #000c;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 -apple-system,"SF Pro Text","Inter",Roboto,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+body{display:flex;justify-content:center;background:radial-gradient(900px 500px at 80% -10%,#1d6fe022,transparent 60%),var(--bg)}
+#app{width:100%;max-width:480px;min-height:100vh;padding:0 16px calc(104px + env(safe-area-inset-bottom));position:relative}
+svg.i{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+svg.i .f{fill:currentColor;stroke:none;opacity:.2}
+
+/* header */
+header{position:sticky;top:0;z-index:8;margin:0 -16px;padding:calc(12px + env(safe-area-inset-top)) 16px 10px;background:linear-gradient(#07090cf2,#07090cd9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.hd{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo svg{height:34px;width:auto}
+.logo small{display:block;color:var(--mut);font-size:11px;line-height:1.2}
+.call{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--tx);background:var(--card2);border:1px solid var(--line2);flex:none}
+.call svg.i{width:20px;height:20px}
+.call:active{transform:scale(.94)}
+.mstripe{display:flex;height:3px;margin:10px -16px -10px}
+.mstripe b{flex:1}.mstripe b:nth-child(1){background:var(--sky)}.mstripe b:nth-child(2){background:var(--navy)}.mstripe b:nth-child(3){background:var(--red)}
+
+h1{font-size:30px;line-height:1.08;margin:18px 0 10px;letter-spacing:-.025em;font-weight:800}
+h2{font-size:19px;margin:28px 0 12px;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between}
+h2 small{font-size:12px;color:var(--mut);font-weight:500}
+p{color:var(--mut);margin:0 0 12px}
+.lead{font-size:15px}
+.view{display:none}.view.on{display:block;animation:in .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* hero */
+.hero{position:relative;border-radius:28px;padding:22px 20px 20px;margin-top:14px;overflow:hidden;
+  background:radial-gradient(140% 90% at 100% 0%,#1d6fe048,transparent 55%),linear-gradient(160deg,#141b25,#0c1016);
+  border:1px solid var(--line2);box-shadow:var(--sh)}
+.hero .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--tx);background:#ffffff0d;border:1px solid #ffffff22;border-radius:99px;padding:5px 10px 5px 7px}
+.hero .badge svg{width:16px;height:16px}
+.hero h1{margin-top:14px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--sky),var(--blue2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.carart{display:block;width:calc(100% + 24px);margin:4px -12px 6px;height:auto}
+.carart .body{stroke:url(#gline);stroke-width:1.8;fill:url(#gfill);stroke-linejoin:round;stroke-dasharray:1100;stroke-dashoffset:1100;animation:draw 2.4s .2s cubic-bezier(.6,.1,.2,1) forwards}
+.carart .det{opacity:0;animation:pop .8s 1.5s forwards}
+.carart .glass{fill:#7cc4ff12;stroke:#7cc4ff80;stroke-width:1.1}
+.carart .ln{fill:none;stroke:#ffffff2e;stroke-width:1}
+.carart .pil{stroke:#0c1016;stroke-width:4;stroke-linecap:butt}
+.carart .tire{fill:#07090c;stroke:#d5dde8;stroke-width:1.6}
+.carart .disc{fill:#151b23;stroke:#ffffff22}
+.carart .cal{fill:none;stroke:#e3262f;stroke-width:4.5;stroke-linecap:round}
+.carart .spk{stroke:#d5dde8;stroke-width:2.2;fill:none;stroke-linecap:round;transform-box:fill-box;transform-origin:center}
+.carart .wh{opacity:0;animation:pop .6s 1.3s forwards}
+.carart .wh .spk{animation:spin 1.6s 1.3s cubic-bezier(.2,.7,.3,1)}
+.carart .hl{fill:#cfe9ff;animation:glow 2.6s 2.4s infinite}
+.carart .floor{stroke:#4c9dff55;stroke-width:1;stroke-dasharray:3 6}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{to{opacity:1}}
+@keyframes spin{from{transform:rotate(-200deg)}}
+@keyframes glow{50%{filter:drop-shadow(0 0 5px #9fd4ff)}}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.kpis div{background:#07090c80;border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center}
+.kpis b{display:block;font-size:19px;letter-spacing:-.02em}
+.kpis span{font-size:11px;color:var(--mut)}
+
+/* buttons */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:16px;padding:16px;font:700 16px/1 inherit;font-family:inherit;color:#fff;background:linear-gradient(180deg,#2a7cf0,#1a62cc);box-shadow:0 8px 22px -8px #1d6fe0cc,inset 0 1px 0 #ffffff30;cursor:pointer;text-decoration:none;transition:transform .12s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--card2);border:1px solid var(--line2);box-shadow:none;color:var(--tx)}
+.btn.sm{width:auto;padding:13px 20px;font-size:15px}
+.btn svg.i{width:20px;height:20px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* tiles & rows */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;cursor:pointer;overflow:hidden;transition:transform .12s,border-color .2s}
+.tile:active{transform:scale(.97)}
+.tile b{display:block;margin-top:12px;font-size:15px}
+.tile span{color:var(--mut);font-size:12px}
+.ico{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;flex:none;color:var(--blue2);background:linear-gradient(145deg,#4c9dff3d,#4c9dff14);border:1px solid #4c9dff4d}
+.ico.red{color:#ff4d55;background:linear-gradient(145deg,#e3262f3d,#e3262f14);border-color:#e3262f4d}
+.ico svg.i{width:22px;height:22px}
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:13px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .2s,background .2s,transform .12s}
+.row:active{transform:scale(.985)}
+.row.static{cursor:default}.row.static:active{transform:none}
+.row .t{flex:1;min-width:0}.row .t b{display:block;font-weight:600}.row .t span{color:var(--mut);font-size:12px}
+.row .pr{text-align:right;white-space:nowrap}
+.row .pr b{display:block;font-weight:700}
+.row .pr span{font-size:11px;color:var(--mut)}
+.row .ck{width:24px;height:24px;border-radius:8px;border:1.6px solid var(--line2);display:grid;place-items:center;flex:none;transition:.2s;color:transparent}
+.row .ck svg{width:16px;height:16px;stroke-width:2.6}
+.row.sel{border-color:#4c9dff99;background:linear-gradient(90deg,#1d6fe01f,#1d6fe008)}
+.row.sel .ck{background:var(--blue);border-color:var(--blue);color:#fff}
+.own{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--blue2);background:#4c9dff1c;border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:2px}
+
+/* chips */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent)}
+.chips::-webkit-scrollbar{display:none}
+.chips.sl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 32px),transparent);mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 32px),transparent)}
+.chip{flex:none;display:flex;align-items:center;gap:7px;padding:9px 14px;border-radius:99px;background:var(--card);border:1px solid var(--line);color:var(--mut);cursor:pointer;font-size:14px;font-weight:600;scroll-snap-align:start;transition:.2s}
+.chip svg.i{width:17px;height:17px}
+.chip.on{background:var(--tx);border-color:var(--tx);color:#0a0d12}
+.chip.dis{opacity:.35;pointer-events:none}
+.chip .cnt{font-size:11px;background:var(--blue);color:#fff;border-radius:99px;padding:1px 6px}
+.chip.on .cnt{background:var(--red)}
+
+/* form */
+.step-h{display:flex;align-items:center;gap:10px;margin:26px 0 12px;font-size:18px;font-weight:700}
+.step-h i{font-style:normal;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;font-size:13px;background:var(--card2);border:1px solid var(--line2);color:var(--mut);transition:.25s}
+.step-h.ok i{background:var(--ok);border-color:var(--ok);color:#fff}
+.field{position:relative;margin-bottom:10px}
+.field label{position:absolute;left:15px;top:9px;font-size:11px;color:var(--mut);pointer-events:none}
+input,select,textarea{width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:27px 15px 11px;color:var(--tx);font:inherit;font-size:16px;outline:0;appearance:none;-webkit-appearance:none;transition:border-color .2s}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238995a5' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+textarea{resize:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 4px #1d6fe022}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.addown{display:flex;gap:8px;align-items:stretch;margin-top:4px}
+.addown input{padding:15px;flex:1}
+.addown button{flex:none;width:54px;border-radius:16px;border:1px dashed var(--blue2);background:#1d6fe014;color:var(--blue2);display:grid;place-items:center;cursor:pointer}
+.carcard{display:flex;align-items:center;gap:12px;background:linear-gradient(120deg,#1d6fe01c,transparent),var(--card);border:1px solid var(--line2);border-radius:18px;padding:12px 14px;margin:6px 0 10px}
+.carcard b{display:block}.carcard span{color:var(--mut);font-size:12px}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.slot{padding:12px 0;text-align:center;border-radius:13px;background:var(--card);border:1px solid var(--line);cursor:pointer;font-size:14px;font-weight:600;transition:.15s}
+.slot.on{background:var(--blue);border-color:var(--blue);box-shadow:0 6px 16px -6px #1d6fe0}
+.slot.off{opacity:.28;pointer-events:none;text-decoration:line-through}
+.dayc{flex-direction:column;gap:0;padding:8px 14px;border-radius:16px;min-width:62px}
+.dayc small{font-size:11px;font-weight:500;opacity:.8}
+.dayc b{font-size:17px}
+.note{display:flex;gap:10px;font-size:12px;color:var(--mut);background:var(--bg2);border:1px dashed var(--line2);border-radius:14px;padding:10px 12px;margin-top:4px}
+.note svg{width:18px;height:18px;color:var(--blue2)}
+.sum{position:sticky;bottom:calc(84px + env(safe-area-inset-bottom));z-index:6;display:flex;align-items:center;gap:12px;justify-content:space-between;margin-top:18px;padding:12px 12px 12px 16px;border-radius:20px;background:#181e27ee;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--line2);box-shadow:var(--sh)}
+.sum b{font-size:19px;letter-spacing:-.01em}
+.sum span{display:block;color:var(--mut);font-size:12px}
+
+/* nav */
+nav{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:456px;display:flex;background:#12171ee8;-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid var(--line2);border-radius:24px;padding:6px;z-index:9;box-shadow:0 14px 40px -10px #000}
+nav button{flex:1;background:0;border:0;color:var(--dim);font:600 10.5px inherit;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 6px;border-radius:18px;cursor:pointer;transition:.2s}
+nav button svg.i{width:23px;height:23px}
+nav button.on{color:var(--tx);background:var(--card2)}
+nav button.on svg.i{color:var(--blue2)}
+
+/* status */
+.steps{margin:4px 0 0 4px}
+.st{display:flex;gap:14px;padding-bottom:20px;position:relative}
+.st::before{content:"";position:absolute;left:10px;top:24px;bottom:0;width:2px;background:var(--line)}
+.st:last-child::before{display:none}
+.st .d{width:22px;height:22px;border-radius:50%;background:var(--card2);border:2px solid var(--line2);flex:none;z-index:1;display:grid;place-items:center;color:#fff}
+.st .d svg{width:13px;height:13px;stroke-width:3}
+.st.done .d{background:var(--ok);border-color:var(--ok)}.st.done::before{background:var(--ok)}
+.st.now .d{background:var(--blue);border-color:var(--blue2);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #4c9dff88}100%{box-shadow:0 0 0 12px #4c9dff00}}
+.st b{display:block}.st span{color:var(--mut);font-size:12px}
+.bar{height:8px;background:var(--card2);border-radius:9px;overflow:hidden;margin:10px 0 6px}
+.bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--sky),var(--blue),var(--red))}
+.tag{display:inline-block;font-size:11px;padding:4px 9px;border-radius:99px;background:#ffffff10;color:#c9d3df;font-weight:700;white-space:nowrap}
+.tag.w{background:#e3262f22;color:var(--warn)}.tag.b{background:#4c9dff1c;color:var(--blue2)}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.kv:last-child{border:0}.kv span{color:var(--mut)}.kv b{text-align:right}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:6px 16px;margin-bottom:10px}
+.demo{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--warn)}
+
+/* reviews */
+.rate{display:flex;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.rate .big{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.stars{display:flex;gap:2px;color:#fff;margin:4px 0}
+.stars svg{width:16px;height:16px}.stars svg .f{opacity:1}
+.meter{margin:9px 0}
+.meter div{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px}
+.meter div span{color:var(--mut)}
+.meter i{display:block;height:6px;border-radius:9px;background:var(--card2);overflow:hidden}
+.meter i u{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--sky));border-radius:9px;text-decoration:none}
+
+.photo{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);margin-bottom:10px;aspect-ratio:4/3;background:var(--card)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo span{position:absolute;left:12px;bottom:12px;font-size:12px;font-weight:600;background:#07090ccc;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:6px 10px;border-radius:10px}
+.sched .kv.today b,.sched .kv.today span{color:var(--blue2);font-weight:700}
+
+/* sheet */
+.sheet-bg{position:fixed;inset:0;background:#000a;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:30;opacity:0;pointer-events:none;transition:.3s}
+.sheet-bg.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,105%);width:100%;max-width:480px;background:var(--bg2);border:1px solid var(--line2);border-bottom:0;border-radius:28px 28px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));z-index:31;transition:transform .45s cubic-bezier(.2,.9,.2,1)}
+.sheet.on{transform:translate(-50%,0)}
+.sheet .grab{width:42px;height:5px;border-radius:9px;background:var(--line2);margin:0 auto 16px}
+.okmark{width:76px;height:76px;margin:6px auto 12px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(#4c9dff33,#4c9dff10);border:1px solid #4c9dff55}
+.okmark svg{width:38px;height:38px;stroke:var(--ok);stroke-width:3;fill:none;stroke-dasharray:40;stroke-dashoffset:40}
+.sheet.on .okmark svg{animation:draw .6s .25s ease forwards}
+.sheet h3{text-align:center;font-size:22px;margin:0 0 6px}
+.sheet p{text-align:center}
+
+.toast{position:fixed;top:calc(16px + env(safe-area-inset-top));left:50%;transform:translate(-50%,calc(-100% - 60px));background:#1b222c;border:1px solid var(--line2);color:var(--tx);font-weight:600;padding:12px 16px;border-radius:16px;transition:.35s cubic-bezier(.2,.9,.2,1);z-index:40;max-width:92%;display:flex;gap:10px;align-items:center;box-shadow:var(--sh)}
+.toast svg{color:var(--warn)}
+.toast.on{transform:translate(-50%,0)}
+.promo{display:flex;align-items:center;gap:12px;margin-top:14px;padding:14px;border-radius:var(--r);cursor:pointer;background:linear-gradient(120deg,#1d6fe02e,#1d6fe00a 70%),var(--card);border:1px solid #4c9dff40}
+.promo .t{flex:1;min-width:0}.promo b{display:block}.promo span{color:var(--mut);font-size:12px}.promo>svg{color:var(--blue2)}
+.tag.r{background:#e3262f22;color:#ff4d55}
+.rm{width:30px;height:30px;border-radius:10px;border:1px solid var(--line2);background:transparent;color:var(--mut);display:grid;place-items:center;cursor:pointer;flex:none}
+.rm svg.i{width:16px;height:16px}
+.row .pr b.ask{font-size:13px}
+.hero.empty{text-align:center;padding:28px 20px;margin-top:0}.hero.empty .ico{margin:0 auto}.hero.empty h2{justify-content:center;margin:14px 0 6px}
+.toast.ok svg{color:var(--blue2)}
+.note .ico{width:32px;height:32px;border-radius:10px}.note .ico svg.i{width:17px;height:17px;color:var(--blue2)}
+.foot{text-align:center;color:var(--dim);font-size:11px;margin:26px 0 0}
+</style>
+</head>
+<body>
+
+<script src="icons.js"></script>
+
+<div id="app">
+<header>
+  <div class="hd">
+    <div class="logo">
+      <svg viewBox="0 0 132 64" aria-label="BMW Expert">
+        <text x="0" y="36" font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="-2" fill="url(#lgB)">BMW</text>
+        <rect x="2" y="44" width="16" height="4" fill="#e3262f"/>
+        <text x="20" y="60" font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="900" font-style="italic" font-size="20" letter-spacing=".5" fill="#e3262f">EXPERT</text>
+      </svg>
+      <div><b style="font-size:14px">БМВ Эксперт</b><small><span id="addrTop">Адоратского, 82</span> · <span id="openNow"></span></small></div>
+    </div>
+    <a class="call" id="callTop" href="tel:+78432152272" aria-label="Позвонить"><svg class="i"><use href="#phone"/></svg></a>
+  </div>
+  <div class="mstripe"><b></b><b></b><b></b></div>
+</header>
+
+<!-- ============ ГЛАВНАЯ ============ -->
+<section class="view on" id="v-home">
+  <div class="hero">
+    <span class="badge"><svg class="i"><use href="#award"/></svg>Хорошее место 2026 · Яндекс</span>
+    <h1>Сервис для<br><em>BMW и MINI</em> в Казани</h1>
+    <p class="lead">Углублённая диагностика, ремонт любой сложности и программирование. Запишитесь онлайн — мы перезвоним и подтвердим время.</p>
+    <!-- BMW M5 Competition (F90), вид сбоку. Масштаб 1px ≈ 14 мм: база 2982, длина 4966, высота 1469 -->
+    <svg class="carart" viewBox="0 0 400 128" aria-label="BMW M5 Competition F90">
+      <ellipse cx="200" cy="119" rx="175" ry="4" fill="#4c9dff" opacity=".12"/>
+      <line class="floor" x1="6" y1="119" x2="394" y2="119"/>
+      <path class="body" d="M30 104C30 110 32 110 38 110L72 108A29 29 0 1 1 122 108L285 108A29 29 0 1 1 335 108L362 108C370 108 374 104 376 98L378 88C378 82 377 78 374 74L370 68C340 62 300 56 258 52L250 51C235 38 222 24 208 17C190 12 150 11 128 15C112 19 96 30 84 38C76 43 60 45 40 46L26 44C22 46 20 52 20 60L22 90C24 98 26 102 30 104Z"/>
+      <g class="det">
+        <!-- стёкла с изгибом Хофмейстера -->
+        <path class="glass" d="M244 55C232 44 220 30 208 21C190 17 150 16 132 19C118 22 106 30 95 39C96 44 102 47 111 48Z"/>
+        <path class="pil" d="M171 17.5 174 52"/>
+        <!-- линии кузова: плечо, порог, двери -->
+        <path class="ln" d="M24 62C110 60 250 63 368 72M127 101H282M174 54 176 107M252 58 256 106M112 50C118 62 125 74 127 88"/>
+        <!-- антенна-плавник -->
+        <path d="M117 16.8c1.5-3.5 4.5-4.6 7.5-4.6l.8 3.2z" fill="#d5dde8" opacity=".8"/>
+        <!-- зеркало -->
+        <path d="M245 53c2-6 13-7 17-2-1 4-9 6-17 2z" fill="#0c1016" stroke="#d5dde8" stroke-width="1.1"/>
+        <!-- «жабры» M на переднем крыле -->
+        <path d="M268 72h14M268 76h11" stroke="#d5dde8" stroke-width="1.6" stroke-linecap="round" opacity=".75"/>
+        <!-- фара, ноздря, фонарь -->
+        <path class="hl" d="M361 68 375 73 376 78 360 74Z"/>
+        <path d="M377 80 378.5 88" stroke="#d5dde8" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M20 51 46 50 46 55 20 57Z" fill="#e3262f"/>
+        <!-- диффузор и четыре трубы -->
+        <path class="ln" d="M28 103H64"/>
+        <ellipse cx="33" cy="107" rx="4.5" ry="2.4" fill="#07090c" stroke="#d5dde8"/>
+        <ellipse cx="44" cy="107" rx="4.5" ry="2.4" fill="#07090c" stroke="#d5dde8"/>
+      </g>
+      <g id="wheels"></g>
+    </svg>
+    <button class="btn" onclick="go('book')"><svg class="i"><use href="#cal"/></svg>Записаться на сервис</button>
+    <div class="kpis">
+      <div><b>4,9★</b><span>348 оценок</span></div>
+      <div><b>93%</b><span>довольны персоналом</span></div>
+      <div><b id="kpiDiag">2 500 ₽</b><span>диагностика</span></div>
+    </div>
+  </div>
+
+  <div id="promo"></div>
+
+  <h2>Что нужно вашему BMW?</h2>
+  <div class="grid">
+    <div class="tile" data-svc="Компьютерная диагностика" onclick="preset('Компьютерная диагностика')"><div class="ico"><svg class="i"><use href="#diag"/></svg></div><b>Диагностика</b><span>Все блоки BMW и MINI</span></div>
+    <div class="tile" data-svc="Замена масла в двигателе" onclick="preset('Замена масла в двигателе')"><div class="ico"><svg class="i"><use href="#oil"/></svg></div><b>Замена масла</b><span id="oilTile">Работа от 900 ₽</span></div>
+    <div class="tile" data-cat="Двигатель" onclick="openCat('Двигатель')"><div class="ico"><svg class="i"><use href="#engine"/></svg></div><b>Двигатель</b><span>ГРМ, ГБЦ, форсунки</span></div>
+    <div class="tile" data-cat="Ходовая" onclick="openCat('Ходовая')"><div class="ico"><svg class="i"><use href="#spring"/></svg></div><b>Ходовая</b><span>Подвеска, пневмо</span></div>
+    <div class="tile" data-cat="КПП" onclick="openCat('КПП')"><div class="ico"><svg class="i"><use href="#gear"/></svg></div><b>АКПП и КПП</b><span>Ремонт, мосты</span></div>
+    <div class="tile" data-cat="Кодирование" onclick="openCat('Кодирование')"><div class="ico"><svg class="i"><use href="#chip"/></svg></div><b>Программирование</b><span>Модификации, опции</span></div>
+  </div>
+  <div class="row" style="margin-top:10px" onclick="go('book');const i=$('#ownIn');i.scrollIntoView({block:'center'});i.focus({preventScroll:true})">
+    <div class="ico red"><svg class="i"><use href="#pen"/></svg></div>
+    <div class="t"><b>Не нашли нужное?</b><span>Опишите проблему своими словами</span></div>
+    <svg class="i" style="color:var(--dim)"><use href="#plus"/></svg>
+  </div>
+
+  <h2>Почему нам доверяют</h2>
+  <div class="row static"><div class="ico"><svg class="i"><use href="#diag"/></svg></div><div class="t"><b>Углублённая диагностика</b><span>Программирование и изменение модификации</span></div></div>
+  <div class="row static"><div class="ico"><svg class="i"><use href="#shield"/></svg></div><div class="t"><b>Монобрендовый сервис BMW и MINI</b><span>Знаем каждую болячку моторов N и B</span></div></div>
+  <div class="row static"><div class="ico"><svg class="i"><use href="#box"/></svg></div><div class="t"><b>Запчасти под заказ</b><span>Оригинал и проверенные аналоги</span></div></div>
+
+  <h2>Отзывы <small>Яндекс Карты</small></h2>
+  <div class="rate">
+    <div><div class="big">4,9</div><div class="stars" id="stars"></div><span style="font-size:12px;color:var(--mut)">348 оценок · 150 отзывов</span></div>
+    <div style="flex:1" id="meters"></div>
+  </div>
+  <p class="foot" id="footHome"></p>
+</section>
+
+<!-- ============ ЗАПИСЬ ============ -->
+<section class="view" id="v-book">
+  <h1>Онлайн-запись</h1>
+  <p>Четыре шага — и мастер перезвонит для подтверждения.</p>
+
+  <div class="step-h" id="s1"><i>1</i>Ваш автомобиль</div>
+  <div class="chips" id="series"></div>
+  <div id="modelBox"></div>
+  <div class="two">
+    <div class="field"><label>Год выпуска</label><select id="year"></select></div>
+    <div class="field"><label>Пробег, км</label><input id="km" inputmode="numeric" placeholder="120 000"></div>
+  </div>
+
+  <div class="step-h" id="s2"><i>2</i>Услуги</div>
+  <div class="chips" id="cats"></div>
+  <div id="services" style="margin-top:6px"></div>
+  <div style="margin-top:14px;font-size:13px;font-weight:600">Своя услуга или описание проблемы</div>
+  <div class="addown">
+    <input id="ownIn" placeholder="Например: стучит справа на кочках" maxlength="120" onkeydown="if(event.key==='Enter'){addOwn();event.preventDefault()}">
+    <button onclick="addOwn()" aria-label="Добавить"><svg class="i"><use href="#plus"/></svg></button>
+  </div>
+  <div id="ownList" style="margin-top:8px"></div>
+  <div class="note"><svg class="i"><use href="#info"/></svg><span>Цены с пометкой «от» ориентировочные — точную стоимость мастер назовёт после осмотра. Работы начинаются только после вашего согласия.</span></div>
+
+  <div class="step-h" id="s3"><i>3</i>Дата и время</div>
+  <div class="chips" id="days"></div>
+  <div class="slots" id="slots" style="margin-top:6px"></div>
+
+  <div class="step-h" id="s4"><i>4</i>Контакты</div>
+  <div class="field"><label>Имя</label><input id="name" placeholder="Как к вам обращаться" autocomplete="name" oninput="marks()"></div>
+  <div class="field"><label>Телефон</label><input id="phone" type="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel"></div>
+  <div class="field"><label>Комментарий</label><textarea id="note" rows="2" placeholder="Госномер, VIN, пожелания"></textarea></div>
+
+  <div class="sum">
+    <div style="min-width:0"><span id="sumN">Ничего не выбрано</span><b id="sumP">0 ₽</b></div>
+    <button class="btn sm" onclick="submit()">Записаться</button>
+  </div>
+</section>
+
+<!-- ============ СТАТУС ============ -->
+<section class="view" id="v-status"></section>
+
+<!-- ============ ГАРАЖ ============ -->
+<section class="view" id="v-garage"></section>
+
+<!-- ============ КОНТАКТЫ ============ -->
+<section class="view" id="v-info"></section>
+</div>
+
+<nav>
+  <button class="on" data-v="home" onclick="go('home')"><svg class="i"><use href="#home"/></svg>Главная</button>
+  <button data-v="book" onclick="go('book')"><svg class="i"><use href="#cal"/></svg>Запись</button>
+  <button data-v="status" onclick="go('status')"><svg class="i"><use href="#wrench"/></svg>Ремонт</button>
+  <button data-v="garage" onclick="go('garage')"><svg class="i"><use href="#car"/></svg>Гараж</button>
+  <button data-v="info" onclick="go('info')"><svg class="i"><use href="#pin"/></svg>Контакты</button>
+</nav>
+
+<div class="sheet-bg" id="sbg" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet">
+  <div class="grab"></div>
+  <div class="okmark"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+  <h3>Вы записаны!</h3>
+  <p id="okText"></p>
+  <div class="card" id="okCard"></div>
+  <div class="btns">
+    <a class="btn ghost tel" href="tel:+78432152272"><svg class="i"><use href="#phone"/></svg>Позвонить</a>
+    <button class="btn" onclick="closeSheet();go('status')">Мой ремонт</button>
+  </div>
+</div>
+<div class="toast" id="toast"><svg class="i"><use href="#info"/></svg><span></span></div>
+
+<script src="data.js"></script>
+<script>
+/* ============ Состояние ============ */
+// скрипт Telegram грузится асинхронно: если telegram.org медленный, страница не ждёт
+let tg=null;
+function tgInit(){tg=window.Telegram&&Telegram.WebApp||null;if(tg){try{tg.ready();tg.expand();tg.setHeaderColor('#07090c');tg.setBackgroundColor('#07090c')}catch(e){}}}
+tgInit();
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ic=(n,red)=>`<div class="ico${red?' red':''}"><svg class="i"><use href="#${n}"/></svg></div>`;
+const fmt=n=>Math.round(n).toLocaleString('ru-RU').replace(/\s/g,' ')+' ₽';
+const telHref=Store.tel;
+let C=Store.cfg();
+const S={car:null,model:0,custom:'',year:'',cat:null,picked:{},own:[],day:null,slot:null,view:'home'};
+
+// прокрутить ленту чипов так, чтобы выбранный был по центру
+function center(sel){requestAnimationFrame(()=>document.querySelectorAll(sel).forEach(box=>{const c=box.querySelector('.chip.on');if(c)box.scrollTo({left:c.offsetLeft-box.offsetLeft-box.clientWidth/2+c.offsetWidth/2,behavior:'smooth'})}))}
+function haptic(t){try{tg&&tg.HapticFeedback&&(t?tg.HapticFeedback.notificationOccurred(t):tg.HapticFeedback.selectionChanged())}catch(e){}}
+const cats=()=>C.cats.filter(c=>!c.hidden&&c.items.some(s=>!s.hidden));
+const cars=()=>C.cars.filter(c=>!c.hidden&&c.models.length);
+
+function go(v){
+  S.view=v;
+  document.querySelectorAll('.view').forEach(e=>e.classList.toggle('on',e.id==='v-'+v));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(v==='status')drawStatus();if(v==='garage')drawGarage();if(v==='info')drawInfo();
+  if(v==='book'){center('#series,#modelBox .chips,#cats,#days')}
+  scrollTo({top:0,behavior:'instant'});haptic();
+}
+function toast(t,ok){const e=$('#toast');e.querySelector('span').textContent=t;e.classList.toggle('ok',!!ok);e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600);haptic(ok?'success':'warning')}
+
+/* ============ Шапка и главная ============ */
+const DN=['вс','пн','вт','ср','чт','пт','сб'],MN=['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+function drawOpen(){
+  const n=Store.now(),h=Store.hoursFor(C,n),t=n.getHours()+n.getMinutes()/60;
+  if(h&&t>=h[0]&&t<h[1]){$('#openNow').textContent=`до ${h[1]}:00`;return}
+  // ближайшее открытие
+  for(let i=0;i<8;i++){const d=new Date(n);d.setDate(n.getDate()+i);const hh=Store.hoursFor(C,d);
+    if(hh&&(i>0||t<hh[0])){$('#openNow').textContent=`откроемся ${i===0?'в':i===1?'завтра в':DN[d.getDay()]+' в'} ${hh[0]}:00`;return}}
+  $('#openNow').textContent='закрыто';
+}
+function drawHome(){
+  $('#addrTop').textContent=C.address.replace(/^ул\.\s*/,'');
+  $('#callTop').href=telHref(C.phone);
+  document.querySelectorAll('.tel').forEach(a=>a.href=telHref(C.phone));
+  document.querySelectorAll('[data-cat]').forEach(t=>t.hidden=!cats().some(c=>c.name===t.dataset.cat));
+  document.querySelectorAll('[data-svc]').forEach(t=>t.hidden=!findSvc(t.dataset.svc));
+  const oil=findSvc('Замена масла в двигателе');if(oil)$('#oilTile').textContent=oil.s.price?`Работа ${oil.s.fixed?'':'от '}${fmt(oil.s.price)}`:'Цена по запросу';
+  const diag=findSvc('Компьютерная диагностика');
+  $('#kpiDiag').textContent=diag&&diag.s.price?fmt(diag.s.price):'—';
+  $('#promo').innerHTML=C.promo.on&&C.promo.title?`<div class="promo" onclick="go('book')">${ic('gift',1)}<div class="t"><b>${esc(C.promo.title)}</b><span>${esc(C.promo.text)}</span></div><svg class="i"><use href="#plus"/></svg></div>`:'';
+  $('#footHome').textContent=`${C.name} · ${C.city}, ${C.address} · ${C.phone}`;
+  drawOpen();
+}
+function findSvc(name){for(const c of C.cats)for(const s of c.items)if(s.name===name&&!s.hidden&&!c.hidden)return{c,s};return null}
+
+/* ============ Авто ============ */
+function drawSeries(){
+  const list=cars();
+  if(S.car!=='own'&&!list.some(c=>c.id===S.car))S.car=(list.find(c=>c.name==='5 серия')||list[0]||{id:'own'}).id;
+  $('#series').innerHTML=list.map(c=>`<div class="chip ${c.id===S.car?'on':''}" onclick="pickSeries('${c.id}')">${esc(c.name)}</div>`).join('')+
+    `<div class="chip ${S.car==='own'?'on':''}" onclick="pickSeries('own')"><svg class="i"><use href="#pen"/></svg>Своя модель</div>`;
+  const box=$('#modelBox');
+  if(S.car==='own'){
+    if(!$('#customCar'))box.innerHTML=`<div class="field" style="margin-top:6px"><label>Модель и кузов</label><input id="customCar" maxlength="60" placeholder="Например: BMW 535i GT F07" oninput="S.custom=this.value;sum()"></div>`;
+    $('#customCar').value=S.custom;
+  }else{
+    const c=list.find(x=>x.id===S.car);if(S.model>=c.models.length)S.model=0;
+    box.innerHTML=`<div class="chips" style="margin-top:2px">${c.models.map((m,i)=>`<div class="chip ${i===S.model?'on':''}" onclick="S.model=${i};drawSeries();haptic()">${esc(m)}</div>`).join('')}</div>`;
+  }
+  center('#series,#modelBox .chips');
+  sum();
+}
+function pickSeries(id){S.car=id;S.model=0;drawSeries();haptic();if(id==='own')setTimeout(()=>$('#customCar').focus(),50)}
+function carName(){
+  if(S.car==='own')return S.custom.trim();
+  const c=cars().find(x=>x.id===S.car);if(!c)return '';
+  return `${c.brand} ${c.models[S.model]}`;
+}
+(function(){const y=Store.now().getFullYear();let o='<option value="">Не важно</option>';for(let i=y;i>=1995;i--)o+=`<option>${i}</option>`;$('#year').innerHTML=o;$('#year').onchange=e=>{S.year=e.target.value;sum()}})();
+
+/* ============ Услуги ============ */
+function drawCats(){
+  const list=cats();
+  if(!list.some(c=>c.id===S.cat))S.cat=list[0]&&list[0].id;
+  $('#cats').innerHTML=list.map(c=>{const n=Object.values(S.picked).filter(p=>p.cat===c.id).length;
+    return `<div class="chip ${c.id===S.cat?'on':''}" onclick="S.cat='${c.id}';drawCats();haptic()"><svg class="i"><use href="#${c.ic}"/></svg>${esc(c.name)}${n?`<span class="cnt">${n}</span>`:''}</div>`}).join('');
+  center('#cats');
+  const cat=list.find(c=>c.id===S.cat);
+  $('#services').innerHTML=!cat?'<p>Список услуг уточняйте по телефону.</p>':cat.items.filter(s=>!s.hidden).map(s=>{const on=!!S.picked[s.id];
+    const price=s.price?(s.fixed?`<b>${fmt(s.price)}</b><span>цена сервиса</span>`:`<b>от ${fmt(s.price)}</b><span>ориентир</span>`):`<b class="ask">по запросу</b><span>после осмотра</span>`;
+    return `<div class="row ${on?'sel':''}" onclick="toggle('${s.id}')">${ic(cat.ic)}<div class="t"><b>${esc(s.name)}${s.fixed&&s.price?'<span class="own">цена</span>':''}</b>${s.desc?`<span>${esc(s.desc)}</span>`:''}</div><div class="pr">${price}</div><div class="ck"><svg class="i"><use href="#check"/></svg></div></div>`}).join('');
+}
+function toggle(id){
+  if(S.picked[id])delete S.picked[id];
+  else for(const c of C.cats){const s=c.items.find(x=>x.id===id);if(s){S.picked[id]={cat:c.id,n:s.name,p:s.price,fix:s.fixed};break}}
+  drawCats();sum();haptic();
+}
+function preset(name){
+  const f=findSvc(name);
+  if(f){S.picked={};S.own=[];S.cat=f.c.id;S.picked[f.s.id]={cat:f.c.id,n:f.s.name,p:f.s.price,fix:f.s.fixed}}
+  go('book');drawCats();drawOwn();sum();
+}
+function openCat(name){const c=cats().find(x=>x.name===name);if(c)S.cat=c.id;go('book');drawCats();setTimeout(()=>$('#s2').scrollIntoView({behavior:'smooth',block:'start'}),60)}
+function addOwn(){
+  const v=$('#ownIn').value.trim();
+  if(v.length<3)return toast('Опишите услугу чуть подробнее');
+  if(S.own.includes(v))return toast('Такая услуга уже добавлена');
+  S.own.push(v);$('#ownIn').value='';drawOwn();sum();haptic('success');
+}
+function drawOwn(){
+  $('#ownList').innerHTML=S.own.map((v,i)=>`<div class="row sel static">${ic('pen',1)}<div class="t"><b>${esc(v)}</b><span>Своя услуга · оценит мастер</span></div><button class="rm" onclick="S.own.splice(${i},1);drawOwn();sum()" aria-label="Убрать"><svg class="i"><use href="#x"/></svg></button></div>`).join('');
+}
+
+/* ============ Дата и время ============ */
+function days(){
+  const now=Store.now(),a=[];
+  for(let i=0;i<14;i++){const d=new Date(now);d.setDate(now.getDate()+i);const h=Store.hoursFor(C,d);
+    const open=!!h&&(i>0||now.getHours()+1<h[1]);a.push({iso:Store.iso(d),d,i,h,open})}
+  return a;
+}
+function drawDays(){
+  const now=Store.now(),a=days();
+  if(!a.some(x=>x.iso===S.day&&x.open)){const f=a.find(x=>x.open);S.day=f?f.iso:null;S.slot=null}
+  $('#days').innerHTML=a.map(x=>`<div class="chip dayc ${x.iso===S.day?'on':''} ${x.open?'':'dis'}" onclick="S.day='${x.iso}';S.slot=null;drawDays();sum();haptic()"><small>${x.i===0?'сегодня':x.i===1?'завтра':DN[x.d.getDay()]}</small><b>${x.d.getDate()}</b><small>${x.h?MN[x.d.getMonth()]:'вых.'}</small></div>`).join('');
+  center('#days');
+  const day=a.find(x=>x.iso===S.day);
+  if(!day){$('#slots').innerHTML='<p style="grid-column:1/-1">Нет свободных дней — позвоните нам.</p>';return}
+  let html='';
+  for(let t=day.h[0];t<day.h[1];t++){
+    const tt=Store.pad(t)+':00',past=day.i===0&&t<=now.getHours(),full=Store.busy(day.iso,tt)>=C.posts;
+    if(S.slot===tt&&(past||full))S.slot=null;
+    html+=`<div class="slot ${past||full?'off':''} ${S.slot===tt?'on':''}" onclick="S.slot='${tt}';drawDays();sum();haptic()">${t}:00</div>`;
+  }
+  $('#slots').innerHTML=html+(html.includes('class="slot  ')||/class="slot (?!off)/.test(html)?'':'<p style="grid-column:1/-1;margin:4px 0 0">На этот день свободного времени нет — выберите другой.</p>');
+}
+function dayLabel(iso){const dt=Store.parse(iso);return `${DN[dt.getDay()]}, ${dt.getDate()} ${MN[dt.getMonth()]}`}
+const hm=t=>String(t).replace(/^0/,'');
+
+/* ============ Итог ============ */
+function list(){return [...Object.values(S.picked).map(s=>({n:s.n,p:s.p,fix:s.fix})),...S.own.map(n=>({n,p:0,own:1}))]}
+function word(n){return n%10===1&&n%100!==11?'услуга':[2,3,4].includes(n%10)&&![12,13,14].includes(n%100)?'услуги':'услуг'}
+function priceText(l){const t=l.reduce((a,s)=>a+s.p,0);return !l.length?'0 ₽':t?(l.some(s=>!s.fix||!s.p)?'от ':'')+fmt(t):'Оценит мастер'}
+function sum(){
+  const l=list();
+  $('#sumN').textContent=l.length?`${l.length} ${word(l.length)} · ${carName()||'авто не указано'}`:'Выберите услуги';
+  $('#sumP').textContent=priceText(l);
+  marks();
+}
+function marks(){
+  $('#s1').classList.toggle('ok',!!carName());
+  $('#s2').classList.toggle('ok',list().length>0);
+  $('#s3').classList.toggle('ok',!!S.slot);
+  $('#s4').classList.toggle('ok',$('#name').value.trim().length>1&&$('#phone').value.replace(/\D/g,'').length===11);
+}
+
+/* телефон: маска +7 (900) 123-45-67, корректно стирается */
+$('#phone').addEventListener('input',e=>{
+  const el=e.target;let d=el.value.replace(/\D/g,'');
+  if(e.inputType==='deleteContentBackward'&&d===(el.dataset.d||''))d=d.slice(0,-1);
+  if(d.startsWith('8'))d='7'+d.slice(1);if(d&&!d.startsWith('7'))d='7'+d;d=d.slice(0,11);
+  let r='';if(d.length){r='+7';if(d.length>1)r+=' ('+d.slice(1,4);if(d.length>=4)r+=')';if(d.length>4)r+=' '+d.slice(4,7);if(d.length>7)r+='-'+d.slice(7,9);if(d.length>9)r+='-'+d.slice(9,11)}
+  el.value=r;el.dataset.d=d;marks();
+});
+$('#km').addEventListener('input',e=>{const d=e.target.value.replace(/\D/g,'').slice(0,7);e.target.value=d?(+d).toLocaleString('ru-RU').replace(/\s/g,' '):''});
+
+function submit(){
+  const l=list(),name=$('#name').value.trim(),phone=$('#phone').value.trim();
+  const goTo=id=>$(id).scrollIntoView({behavior:'smooth',block:'center'});
+  if(!carName()){goTo('#s1');return toast('Укажите модель автомобиля')}
+  if(!l.length){goTo('#s2');return toast('Выберите услугу или опишите проблему')}
+  drawDays();
+  if(!S.slot){goTo('#s3');return toast('Выберите удобное время')}
+  if(name.length<2){goTo('#s4');return toast('Как к вам обращаться?')}
+  if(phone.replace(/\D/g,'').length!==11){goTo('#s4');return toast('Проверьте номер телефона')}
+  const o={id:Store.uid()+Date.now().toString(36),num:Math.max(1000,...Store.orders().map(x=>x.num||0))+1,car:carName(),year:S.year,km:$('#km').value.trim(),
+    services:l,date:S.day,time:S.slot,name,phone,note:$('#note').value.trim(),status:'new',created:new Date().toISOString()};
+  Store.addOrder(o);
+  Store.saveMyCar({car:o.car,year:o.year,km:o.km});
+  $('#okText').textContent=`${name}, ждём вас ${dayLabel(o.date)} в ${hm(o.time)}. Перезвоним в рабочее время, чтобы подтвердить запись.`;
+  $('#okCard').innerHTML=`<div class="kv"><span>Автомобиль</span><b>${esc(o.car)}</b></div><div class="kv"><span>Услуги</span><b>${l.length}</b></div><div class="kv"><span>Адрес</span><b>${esc(C.address)}</b></div>`;
+  $('#sbg').classList.add('on');$('#sheet').classList.add('on');haptic('success');
+  S.picked={};S.own=[];S.slot=null;$('#note').value='';drawCats();drawOwn();drawDays();sum();
+}
+function closeSheet(){$('#sbg').classList.remove('on');$('#sheet').classList.remove('on')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+
+/* ============ Мой ремонт ============ */
+const STEP=(cls,b,s)=>`<div class="st ${cls}"><div class="d">${cls==='done'?'<svg class="i"><use href="#check"/></svg>':''}</div><div><b>${b}</b><span>${s}</span></div></div>`;
+function orderCard(o){
+  const st=Store.STATUSES[o.status]||Store.STATUSES.new,n=st.step,c=o.status==='cancelled';
+  const steps=[['Заявка отправлена','Мы получили ваши данные'],['Подтверждение','Перезвоним в рабочее время'],['Приёмка и ремонт',`${dayLabel(o.date)}, ${hm(o.time)} · ${esc(C.address)}`],['Готово к выдаче','Сообщим, когда можно забирать'],['Автомобиль выдан','Спасибо, что выбрали нас']];
+  const cls=i=>o.status==='done'||i<n?'done':i===n?'now':'';
+  const tag=c?'r':o.status==='ready'||o.status==='done'?'':'b';
+  return `<div class="row static">${ic('car')}<div class="t"><b>${esc(o.car)}</b><span>№${o.num||''} · ${dayLabel(o.date)}, ${hm(o.time)}</span></div><span class="tag ${tag}">${st.t}</span></div>
+    ${c?'':`<div class="bar"><i style="width:${st.pct}%"></i></div>`}<p style="font-size:12px">${st.client}</p>
+    ${o.ownerNote?`<div class="note" style="margin-bottom:12px">${ic('chat')}<span><b style="color:var(--tx)">Комментарий мастера</b><br>${esc(o.ownerNote)}</span></div>`:''}
+    ${c?'':`<div class="steps">${steps.map((s,i)=>STEP(cls(i+1),s[0],s[1])).join('')}</div>`}
+    <div class="card">${o.services.map(s=>`<div class="kv"><span>${esc(s.n)}</span><b>${s.p?(s.fix?'':'от ')+fmt(s.p):'оценит мастер'}</b></div>`).join('')}
+    ${o.final?`<div class="kv"><span>Итого по смете</span><b style="color:var(--blue2)">${fmt(o.final)}</b></div>`:''}</div>
+    ${['new','confirmed'].includes(o.status)?`<div class="btns"><a class="btn ghost" href="${telHref(C.phone)}"><svg class="i"><use href="#phone"/></svg>Позвонить</a><button class="btn ghost" onclick="cancelOrder('${o.id}')"><svg class="i"><use href="#x"/></svg>Отменить</button></div>`:''}`;
+}
+function drawStatus(){
+  const mine=Store.myOrders().sort((a,b)=>b.created.localeCompare(a.created));
+  const active=mine.find(o=>!['done','cancelled'].includes(o.status))||mine[0];
+  let h='<h1>Мой ремонт</h1>';
+  if(active){
+    h+=orderCard(active);
+    const rest=mine.filter(o=>o!==active);
+    if(rest.length)h+=`<h2>Другие записи</h2><div class="card">${rest.map(o=>`<div class="kv"><span>${dayLabel(o.date)} · ${esc(o.car)}</span><b>${(Store.STATUSES[o.status]||{}).t||''}</b></div>`).join('')}</div>`;
+  }else{
+    h+=`<p>Здесь появится статус вашего автомобиля: подтверждение, ход ремонта, смета и готовность к выдаче. Вот как это выглядит:</p>
+    <div class="row static">${ic('car')}<div class="t"><b>BMW X5 xDrive30d (F15)</b><span>Пример заказ-наряда</span></div><span class="tag b">В работе</span></div>
+    <div class="bar"><i style="width:65%"></i></div><p style="font-size:12px">Мастер работает с автомобилем</p>
+    <div class="steps">${STEP('done','Заявка отправлена','Мы получили ваши данные')}${STEP('done','Подтверждение','Запись подтверждена')}${STEP('now','Приёмка и ремонт','Замена рычагов и масла')}${STEP('','Готово к выдаче','Сообщим, когда можно забирать')}${STEP('','Автомобиль выдан','')}</div>
+    <button class="btn" onclick="go('book')"><svg class="i"><use href="#cal"/></svg>Записаться</button>`;
+  }
+  $('#v-status').innerHTML=h;
+}
+function cancelOrder(id){
+  const doIt=()=>{Store.updateOrder(id,{status:'cancelled',cancelledBy:'client'});drawStatus();toast('Запись отменена',1)};
+  // в Telegram — родное окно подтверждения, в браузере — обычное
+  if(tg&&tg.showConfirm&&tg.platform&&tg.platform!=='unknown'){try{tg.showConfirm('Отменить запись?',ok=>ok&&doIt());return}catch(e){}}
+  if(confirm('Отменить запись?'))doIt();
+}
+
+/* ============ Гараж ============ */
+function drawGarage(){
+  const c=Store.myCar(),hist=Store.myOrders().sort((a,b)=>b.created.localeCompare(a.created));
+  let h='<h1>Мой гараж</h1>';
+  if(!c){
+    h+=`<div class="hero empty">${ic('car')}<h2>Пока пусто</h2><p>После первой записи ваш автомобиль появится здесь с напоминаниями о ТО.</p><button class="btn" onclick="go('book')"><svg class="i"><use href="#cal"/></svg>Записаться</button></div>`;
+  }else{
+    const km=parseInt(String(c.km).replace(/\D/g,''))||0,next=km?Math.ceil((km+1)/10000)*10000:0,left=next-km,pct=km?Math.round((1-left/10000)*100):0,nf=n=>n.toLocaleString('ru-RU').replace(/\s/g,' ');
+    h+=`<div class="hero" style="padding:18px 18px 16px;margin-top:0"><div style="display:flex;gap:12px;align-items:center">${ic('car')}<div><b style="font-size:18px">${esc(c.car)}</b><br><span style="color:var(--mut);font-size:13px">${c.year?c.year+' г.':'год не указан'}</span></div></div>
+    ${km?`<div class="kpis" style="grid-template-columns:1fr 1fr"><div><b>${nf(km)}</b><span>пробег, км</span></div><div><b>${nf(next)}</b><span>следующее ТО</span></div></div><div class="bar"><i style="width:${pct}%"></i></div><span style="font-size:12px;color:var(--mut)">До замены масла ≈ ${nf(left)} км</span>`:`<p style="margin:12px 0 0;font-size:13px">Укажите пробег при записи — посчитаем, когда менять масло.</p>`}</div>
+    <h2>Напоминания</h2>
+    <div class="row static">${ic('oil')}<div class="t"><b>Замена масла</b><span>Каждые 7–10 тыс. км</span></div><span class="tag ${km&&left<2000?'r':''}">${km&&left<2000?'Скоро':'В норме'}</span></div>
+    <div class="row static">${ic('brake')}<div class="t"><b>Тормозная жидкость</b><span>Раз в 2 года</span></div><span class="tag">Проверить</span></div>
+    <div class="row static">${ic('snow')}<div class="t"><b>Подготовка к зиме</b><span>Аккумулятор, антифриз, Webasto</span></div><span class="tag">Сезон</span></div>
+    <h2>История</h2><div class="card">${hist.map(o=>`<div class="kv"><span>${dayLabel(o.date)}</span><b>${o.services.length} ${word(o.services.length)} · ${(Store.STATUSES[o.status]||{}).t||''}</b></div>`).join('')||'<div class="kv"><span>Записей пока нет</span></div>'}</div>
+    <button class="btn" onclick="go('book')"><svg class="i"><use href="#cal"/></svg>Записаться снова</button>`;
+  }
+  $('#v-garage').innerHTML=h;
+}
+
+/* ============ Контакты ============ */
+function drawInfo(){
+  const names=['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'],td=Store.now().getDay();
+  $('#v-info').innerHTML=`<h1>Контакты</h1>
+  <div class="photo"><img src="workshop.webp" alt="Цех ${esc(C.name)}" style="object-position:50% 32%" onerror="this.parentNode.style.display='none'"><span>Наш цех · ${esc(C.address)}</span></div>
+  <div class="row static">${ic('pin')}<div class="t"><b>${esc(C.city)}, ${esc(C.address)}</b><span>${esc(C.addressNote)}</span></div></div>
+  <div class="row static">${ic('phone')}<div class="t"><b>${esc(C.phone)}</b><span>Звоните в рабочие часы</span></div></div>
+  <div class="btns" style="margin:12px 0 4px">
+    <a class="btn" href="${telHref(C.phone)}"><svg class="i"><use href="#phone"/></svg>Позвонить</a>
+    <a class="btn ghost" href="${esc(C.mapUrl)}" target="_blank" rel="noopener"><svg class="i"><use href="#route"/></svg>Маршрут</a>
+  </div>
+  <h2>График работы</h2>
+  <div class="card sched">${[1,2,3,4,5,6,0].map((d,i)=>{const h=d===td?Store.hoursFor(C,Store.now()):C.hours[d],hol=d===td&&C.hours[d]&&!h;return `<div class="kv ${d===td?'today':''}"><span>${names[i]}</span><b>${h?`${h[0]}:00 – ${h[1]}:00`:hol?'Сегодня выходной':'Выходной'}</b></div>`}).join('')}</div>
+  <h2>Ремонтируем</h2>
+  <div class="row static">${ic('car')}<div class="t"><b>BMW и MINI</b><span>Все серии, включая X, M и электромобили i</span></div></div>
+  <p class="foot">Мини-приложение ${esc(C.name)}</p>`;
+}
+
+/* ============ Отзывы ============ */
+$('#stars').innerHTML='<svg class="i"><use href="#star"/></svg>'.repeat(5);
+$('#meters').innerHTML=[['Персонал',93],['Время ожидания',84],['Диагностика',82],['Ремонт',80],['Запчасти',80]].map(([n,v])=>`<div class="meter"><div><span>${n}</span><b>${v}%</b></div><i><u style="width:${v}%"></u></i></div>`).join('');
+
+/* ============ Колёса M5: Y-образные спицы, красный суппорт ============ */
+(function(){
+  const P=(cx,cy,r,a)=>[(cx+r*Math.cos(a*Math.PI/180)).toFixed(1),(cy+r*Math.sin(a*Math.PI/180)).toFixed(1)].join(' ');
+  const wheel=(cx,cy,calA)=>{
+    let spokes='';
+    for(let k=0;k<5;k++){const a=k*72-90;spokes+=`M${P(cx,cy,4.5,a)}L${P(cx,cy,10,a)}L${P(cx,cy,18,a-11)}M${P(cx,cy,10,a)}L${P(cx,cy,18,a+11)}`}
+    return `<g class="wh"><circle class="tire" cx="${cx}" cy="${cy}" r="25"/><circle class="disc" cx="${cx}" cy="${cy}" r="19.5"/>
+      <path class="cal" d="M${P(cx,cy,14,calA-28)}A14 14 0 0 1 ${P(cx,cy,14,calA+28)}"/>
+      <g class="spk"><circle cx="${cx}" cy="${cy}" r="19" fill="none" stroke-width="1.3"/><path d="${spokes}"/><circle cx="${cx}" cy="${cy}" r="3.2" fill="#d5dde8" stroke="none"/></g></g>`;
+  };
+  document.getElementById('wheels').innerHTML=wheel(97,93,-140)+wheel(310,93,-40);
+})();
+
+// затухание слева появляется, только когда ленту прокрутили
+document.addEventListener('scroll',e=>{const b=e.target;if(b.classList&&b.classList.contains('chips'))b.classList.toggle('sl',b.scrollLeft>4)},true);
+
+/* ============ Старт и живое обновление из кабинета ============ */
+function renderAll(){C=Store.cfg();drawHome();drawSeries();drawCats();drawOwn();drawDays();sum();
+  if(S.view==='status')drawStatus();if(S.view==='garage')drawGarage();if(S.view==='info')drawInfo()}
+Store.on(renderAll);
+renderAll();
+setInterval(()=>{drawOpen();if(S.view==='book')drawDays()},60000);
+</script>
+</body>
+</html>
